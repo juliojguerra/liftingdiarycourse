@@ -21,6 +21,13 @@ All source code lives under `src/app/` — the App Router convention. Pages are 
 
 **Path alias:** `@/*` maps to `./src/*`.
 
+## Documentation First
+
+**IMPORTANT:** Before generating any code, always consult the relevant documentation file in the `/docs` directory. Currently available:
+- `docs/ui.md` — UI patterns, component guidelines, and design decisions
+
+If a relevant doc exists for the feature or area being worked on, read it first and follow its conventions.
+
 ## Key Conventions
 
 - **Styling:** Tailwind CSS v4 utility classes + CSS custom properties in `globals.css` for theming. Dark mode is handled via `prefers-color-scheme` media query on `:root` variables — no class-based toggling.
