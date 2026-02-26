@@ -25,6 +25,7 @@ All source code lives under `src/app/` — the App Router convention. Pages are 
 
 **IMPORTANT:** Before generating any code, always consult the relevant documentation file in the `/docs` directory. Currently available:
 - `docs/ui.md` — UI patterns, component guidelines, and design decisions
+- `docs/data-fetching.md`
 
 If a relevant doc exists for the feature or area being worked on, read it first and follow its conventions.
 
