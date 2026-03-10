@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { format, isSameDay } from "date-fns";
-import { CalendarIcon, Dumbbell } from "lucide-react";
+import { CalendarIcon, Dumbbell, Plus } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -25,16 +27,25 @@ function WorkoutDayButton(props: React.ComponentProps<typeof DayButton>) {
 
 type Props = {
   workouts: WorkoutWithExercises[];
+  initialDate?: Date;
 };
 
-export function WorkoutCalendar({ workouts }: Props) {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+export function WorkoutCalendar({ workouts, initialDate }: Props) {
+  const router = useRouter();
+  const [selectedDate, setSelectedDate] = useState<Date>(initialDate ?? new Date());
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  function handleDateSelect(date: Date) {
+    setSelectedDate(date);
+    const dateParam = date.toISOString().split("T")[0];
+    router.replace(`/dashboard?date=${dateParam}`);
+  }
 
   const workoutDates = workouts.map((w) => w.startedAt);
   const workoutsForDate = workouts.filter((w) =>
     isSameDay(w.startedAt, selectedDate)
   );
+  const newWorkoutHref = `/dashboard/workout/new?date=${selectedDate.toISOString().split("T")[0]}`;
 
   return (
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-[auto_1fr] sm:items-start">
@@ -59,7 +70,7 @@ export function WorkoutCalendar({ workouts }: Props) {
               selected={selectedDate}
               onSelect={(date) => {
                 if (date) {
-                  setSelectedDate(date);
+                  handleDateSelect(date);
                   setCalendarOpen(false);
                 }
               }}
@@ -73,18 +84,34 @@ export function WorkoutCalendar({ workouts }: Props) {
 
       {/* Workout List */}
       <section>
-        <h2 className="mb-4 text-lg font-medium">
-          {workoutsForDate.length > 0
-            ? `${workoutsForDate.length} workout${workoutsForDate.length > 1 ? "s" : ""} logged`
-            : "No workouts logged"}
-        </h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-medium">
+            {workoutsForDate.length > 0
+              ? `${workoutsForDate.length} workout${workoutsForDate.length > 1 ? "s" : ""} logged`
+              : "No workouts logged"}
+          </h2>
+          {workoutsForDate.length > 0 && (
+            <Button asChild size="sm">
+              <Link href={newWorkoutHref}>
+                <Plus className="size-4" />
+                Log workout
+              </Link>
+            </Button>
+          )}
+        </div>
 
         {workoutsForDate.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center text-muted-foreground">
             <Dumbbell className="mb-3 size-8 opacity-40" />
-            <p className="text-sm">
+            <p className="mb-4 text-sm">
               No workouts on {format(selectedDate, "do MMM yyyy")}
             </p>
+            <Button asChild variant="outline" size="sm">
+              <Link href={newWorkoutHref}>
+                <Plus className="size-4" />
+                Log workout
+              </Link>
+            </Button>
           </div>
         ) : (
           <ul className="space-y-4">
