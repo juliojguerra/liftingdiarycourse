@@ -8,6 +8,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import { DarkModeToggle } from "@/components/dark-mode-toggle";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,10 +34,18 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){var s=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(s===null&&d)){document.documentElement.classList.add('dark')}})();`,
+            }}
+          />
+        </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <header className="flex justify-end p-4">
+          <header className="flex justify-end items-center gap-2 p-4">
+            <DarkModeToggle />
             <SignedOut>
               <div className="flex items-center gap-3">
                 <SignInButton mode="modal">
