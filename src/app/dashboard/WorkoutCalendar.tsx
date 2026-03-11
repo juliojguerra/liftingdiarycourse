@@ -117,29 +117,31 @@ export function WorkoutCalendar({ workouts, initialDate }: Props) {
           <ul className="space-y-4">
             {workoutsForDate.map((workout) => (
               <li key={workout.id}>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">{workout.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      {format(workout.startedAt, "h:mm a")}
-                      {workout.completedAt && (
-                        <> &mdash; {format(workout.completedAt, "h:mm a")}</>
-                      )}
-                    </p>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-1">
-                      {workout.exercises.map((exercise) => (
-                        <li
-                          key={exercise}
-                          className="text-sm text-muted-foreground"
-                        >
-                          · {exercise}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
+                <Link href={`/dashboard/workout/${workout.id}`} className="block">
+                  <Card className="cursor-pointer transition-colors hover:bg-accent">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">{workout.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        {format(workout.startedAt, "h:mm a")}
+                        {workout.completedAt && (
+                          <> &mdash; {format(workout.completedAt, "h:mm a")}</>
+                        )}
+                      </p>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-1">
+                        {workout.exercises.map((exercise) => (
+                          <li
+                            key={exercise}
+                            className="text-sm text-muted-foreground"
+                          >
+                            · {exercise}
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </Link>
               </li>
             ))}
           </ul>
